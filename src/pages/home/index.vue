@@ -74,13 +74,14 @@
 
 <script setup>
 import 'leaflet/dist/leaflet.css'
-import L from 'leaflet'
+import L, { divIcon } from 'leaflet'
 import { useGeoJsonStore } from '@/stores/geoJson'
 import '@/plugins/sidebar/L.Control.Sidebar.css'
 import '@/plugins/Sidebar/L.Control.Sidebar'
 const store = useGeoJsonStore()
 await store.getChinaData()
 let map = null
+let lonLatGridLineLayer = null
 let sidebar = null
 const baseLayers = []
 const overLayers = []
@@ -211,6 +212,62 @@ const initMap = () => {
   handleCreateLayerControl()
 }
 
+// 添加网格
+let addLonLatLine = () => {
+  let zoom = map.getZoom()
+  let bounds = map.getBounds()
+  let north = bounds.getNorth()
+  let east = bounds.getEast()
+  let d = 90 / Math.pow(2, zoom - 1)
+  for (let index = -180; index <= 360; index += d) {
+    if (bounds.contains([north, index])) {
+      let lonLine = L.polyline(
+        [
+          [-90, index],
+          [90, index]
+        ],
+        { weight: 1, color: '#ccc' }
+      )
+      lonLatGridLineLayer.addLayer(lonLine)
+      let text = index.toFixed(1) + '°'
+      if (zoom > 10) {
+        text = index.toFixed((zoom - 8) / 2) + '°'
+      }
+      let divIcon = L.divIcon({
+        className: 'grid-icon',
+        html: `<div style="white-space:nowrap;color:#707064;">${text}</div>`,
+        iconAnchor: [0, 5]
+      })
+      let textMarker = L.marker([north, index], { icon: divIcon })
+      lonLatGridLineLayer.addLayer(textMarker)
+    }
+  }
+  if (d > 90) d = 90
+  for (let index = -90; index <= 90; index += d) {
+    if (bounds.contains([index, east])) {
+      let lonLine = L.polyline(
+        [
+          [index, -180],
+          [index, 360]
+        ],
+        { weight: 1, color: '#ccc' }
+      )
+      lonLatGridLineLayer.addLayer(lonLine)
+      let text = index.toFixed(1) + '°'
+      if (zoom > 10) {
+        text = index.toFixed((zoom - 8) / 2) + '°'
+      }
+      let divIcon = L.divIcon({
+        className: 'grid-icon',
+        html: `<div style="white-space: nowrap; color: #707064;">${text}</div>`,
+        iconAnchor: [(text.length + 1) * 6, 0]
+      })
+      let textMarker = L.marker([index, east], { icon: divIcon })
+      lonLatGridLineLayer.addLayer(textMarker)
+    }
+  }
+}
+
 // 折线
 const polyline = (latlngs, options) => {
   const polyline = L.polyline(latlngs, options).addTo(map)
@@ -276,6 +333,12 @@ const removeAll = () => {
 }
 onMounted(() => {
   initMap()
+  lonLatGridLineLayer = L.featureGroup().addTo(map)
+  addLonLatLine()
+  map.on('zoomend move', () => {
+    lonLatGridLineLayer.clearLayers()
+    addLonLatLine()
+  })
 })
 </script>
 <style lang="less" scoped>
