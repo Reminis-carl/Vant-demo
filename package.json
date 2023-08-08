@@ -10,6 +10,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@geoman-io/leaflet-geoman-free": "^2.14.2",
     "@vant/touch-emulator": "^1.4.0",
     "@vant/use": "^1.5.2",
     "@vueuse/core": "^10.2.1",

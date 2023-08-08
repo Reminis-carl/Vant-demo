@@ -24,7 +24,6 @@ import 'vant/es/notify/style'
 // ImagePreview
 // import { showImagePreview } from 'vant';
 import 'vant/es/image-preview/style'
-
 const app = createApp(App)
 // 错误处理器，用来捕获所有子组件错误
 app.config.errorHandler = err => {
