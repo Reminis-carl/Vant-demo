@@ -3,7 +3,7 @@
 </template>
 <script setup>
 import { onMounted } from 'vue'
-import { Fullscreen, MouseLocation, Scale } from '@antv/l7'
+import { Fullscreen, MouseLocation, Scale,LayerSwitch } from '@antv/l7'
 import { useMapStore } from '@/stores/lMap'
 import { DrawControl, ControlEvent } from '@antv/l7-draw'
 const store = useMapStore()
@@ -39,6 +39,12 @@ onMounted(() => {
     )
     //   Scale比例尺
     scene.addControl(new Scale())
+
+    // 突出切换
+    const layerSwitch = new LayerSwitch({
+      layers: [...store.getLayers]
+    })
+    scene.addControl(layerSwitch)
   })
 })
 </script>

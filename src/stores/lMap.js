@@ -20,6 +20,7 @@ export const useMapStore = defineStore('map', {
       this.scene = new Scene({
         id: 'mapContainer',
         logoVisible: false,
+        antialias: true,  // 是否开启抗锯齿
         map: new Mapbox({
           pitch: 0,
           //   style: 'blank',
@@ -53,6 +54,7 @@ export const useMapStore = defineStore('map', {
     drawBaseMap(data) {
       // 绘制中国区域区域图层
       const chinaPolygonLayer = new PolygonLayer({
+        name: '省区域',
         autoFit: true
       }).source(data)
 
@@ -62,6 +64,7 @@ export const useMapStore = defineStore('map', {
       this.layers.push(chinaPolygonLayer)
       // 绘制中国区域边界图层
       const chinaLineLayer = new LineLayer({
+        name: '省边界',
         zIndex: 2
       })
         .source(data)
@@ -75,6 +78,7 @@ export const useMapStore = defineStore('map', {
     // 绘制中国各省份标注
     drawProvinceLabel(data) {
       const labelLayer = new PointLayer({
+        name: '省份名称',
         zIndex: 5
       })
         .source(data, {
@@ -99,6 +103,9 @@ export const useMapStore = defineStore('map', {
   getters: {
     getScene: state => {
       return state.scene
+    },
+    getLayers: state => {
+      return state.layers
     }
   }
 })

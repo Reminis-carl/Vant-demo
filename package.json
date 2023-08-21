@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
     "@antv/l7-draw": "^3.0.31",
+    "@antv/l7-maps": "^2.17.8",
     "@geoman-io/leaflet-geoman-free": "^2.14.2",
     "@panzhiyue/leaflet-canvaslabel": "^1.2.0",
     "@vueuse/core": "^10.2.1",
