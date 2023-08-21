@@ -10,14 +10,17 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^6.1.0",
+    "@antv/l7-draw": "^3.0.31",
     "@geoman-io/leaflet-geoman-free": "^2.14.2",
-    "@vant/touch-emulator": "^1.4.0",
-    "@vant/use": "^1.5.2",
+    "@panzhiyue/leaflet-canvaslabel": "^1.2.0",
     "@vueuse/core": "^10.2.1",
+    "ant-design-vue": "^4.0.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
     "echarts": "^5.4.3",
     "leaflet": "^1.9.4",
+    "leaflet-minimap": "^3.6.1",
     "leaflet-polylinedecorator": "^1.6.0",
     "leaflet-river": "^1.0.1",
     "leaflet.bezier": "^0.1.1",
@@ -28,7 +31,6 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.1.3",
     "qs": "^6.11.2",
-    "vant": "^4.6.3",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2"
   },

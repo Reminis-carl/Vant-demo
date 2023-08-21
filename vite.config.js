@@ -3,15 +3,14 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from 'vite'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
-import { VantResolver } from 'unplugin-vue-components/resolvers'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import pxtovw from 'postcss-px-to-viewport'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
-export default defineConfig((mode) => {
+export default defineConfig(mode => {
   const env = loadEnv(mode, './env')
-  console.log(env)
   return {
     plugins: [
       vue(),
@@ -21,7 +20,11 @@ export default defineConfig((mode) => {
         dts: 'src/auto-imports.d.ts'
       }),
       Components({
-        resolvers: [VantResolver()]
+        resolvers: [
+          AntDesignVueResolver({
+            importStyle: false // css in js
+          })
+        ]
       })
     ],
     css: {
@@ -71,13 +74,13 @@ export default defineConfig((mode) => {
         '/api': {
           target: 'http://localhost:3000',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
+          rewrite: path => path.replace(/^\/api/, '')
         },
         // 正则表达式写法：http://localhost:5173/fallback/ -> http://jsonplaceholder.typicode.com/
         '^/fallback/.*': {
           target: 'http://jsonplaceholder.typicode.com',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/fallback/, '')
+          rewrite: path => path.replace(/^\/fallback/, '')
         },
         // 使用 proxy 实例
         // "/api": {

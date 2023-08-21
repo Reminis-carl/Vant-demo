@@ -5,8 +5,14 @@
 <script setup>
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import '@geoman-io/leaflet-geoman-free'
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 import { useGeoJsonStore } from '@/stores/geoJson'
+import MiniMap from 'leaflet-minimap'
+import 'leaflet-minimap/dist/Control.MiniMap.min.css'
 import '@/plugins/Leaflet.streetlabels'
+// import '@/plugins/L.LabelTextCollision'
+// import { CanvasLabel } from '@panzhiyue/leaflet-canvaslabel'
 import '@/plugins/fullscreen/Control.FullScreen.css'
 import '@/plugins/fullscreen/Control.FullScreen'
 import '@/plugins/leaflet.latlng-graticule'
@@ -27,7 +33,17 @@ const handleInitializeLayer = () => {
   const chinaMapData = store.chinaGeoData
   const geoMap = L.geoJSON(chinaMapData, {
     style: geoStyle,
-    onEachFeature: () => {}
+    labelStyle: {
+      text: 'Leaflet.LabelTextCollision!!!!!!!!',
+      zIndex: 0,
+      collisionFlg: false,
+      zIndex: 0,
+      textAlign: 'right'
+    },
+    onEachFeature: (feature, layer) => {
+      //   layer.bindPopup(feature.properties.name)
+      layer.bindTooltip(feature.properties.name)
+    }
   })
   baseLayers.push({ id: 'chinaMap', label: '中国区域底图', layer: geoMap })
   overLayers.push({ id: 'airspace', label: '空域', layer: L.layerGroup([]) })
@@ -77,7 +93,6 @@ const initMap = () => {
     propertyName: 'name',
     showLabelIf: function (layer) {
       return Boolean(layer.properties.name)
-      //   return true //layer.properties.type == "primary";
     },
     fontStyle: {
       dynamicFontSize: false,
@@ -89,7 +104,8 @@ const initMap = () => {
     }
   })
   map = L.map('mapContainer', {
-    renderer: streetLabelsRenderer,
+    // renderer: streetLabelsRenderer,
+    // renderer: canvasLabel,
     minZoom: 3,
     zoom: 6,
     maxZoom: 10,
@@ -98,14 +114,26 @@ const initMap = () => {
     detectRetina: true,
     fullscreenControl: true,
     fullscreenControlOptions: {
-      // optional
       title: 'Show me the fullscreen !',
       titleCancel: 'Exit fullscreen mode'
     }
   }).setView([32.44896095499, 103.909632196358], 4)
   const layer = handleInitializeLayer()
+  const miniMap = new L.Control.MiniMap(layer).addTo(map)
   layer.addTo(map)
   handleCreateLayerControl()
+
+  //   const tiles = L.tileLayer(
+  //     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  //     // 'http://gisserver.tianditu.gov.cn/TDTService/wfs',
+  //     {
+  //       maxZoom: 19,
+  //       attributionControl: false // 隐藏logo
+  //     }
+  //   )
+  //   map = L.map('mapContainer').setView([51.505, -0.09], 13).addLayer(tiles)
+  //   handleCreateLayerControl()
+  //   const miniMap = new L.Control.MiniMap(tiles, {}).addTo(map)
 }
 
 // 加载geoJson数据
@@ -120,6 +148,16 @@ onMounted(() => {
   })
   const gridLayer = initGrid()
   gridLayer.addTo(map)
+  map.pm.addControls({
+    position: 'topleft',
+    drawCircleMarker: false,
+    rotateMode: false,
+    cutPolygon: false,
+    oneBlock: true
+  })
+  map.on('pm:dragstart', e => {
+    console.error(e)
+  })
 })
 </script>
 <style lang="less" scoped></style>

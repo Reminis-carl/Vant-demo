@@ -12,6 +12,34 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('@/pages/home/index.vue'),
         meta: { title: '首页' }
+      },
+      {
+        path: '/navigationalData',
+        name: 'NavigationalData',
+        hidden: false,
+        component: () => import('@/pages/navigationalData/index.vue'),
+        meta: { title: '航行资料' }
+      },
+      {
+        path: '/controlProvision',
+        name: 'ControlProvision',
+        hidden: false,
+        component: () => import('@/pages/controlProvision/index.vue'),
+        meta: { title: '管制规定' }
+      },
+      {
+        path: '/pictureChart',
+        name: 'PictureChart',
+        hidden: false,
+        component: () => import('@/pages/pictureChart/index.vue'),
+        meta: { title: '图片类导航' }
+      },
+      {
+        path: '/assistTool',
+        name: 'AssistTool',
+        hidden: false,
+        component: () => import('@/pages/assistTool/index.vue'),
+        meta: { title: '辅助工具' }
       }
     ]
   }
